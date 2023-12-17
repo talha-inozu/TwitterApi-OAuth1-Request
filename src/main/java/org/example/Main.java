@@ -29,16 +29,12 @@ public class Main {
         String consumerSecret = "2NT9HwmoMHKwONQVycmNsqk9RrrcsqHrjzU98QW5prIb37joDX"; // Your consumer secret
         String token = "2869208387-H0atg8xhapaj6WuA03MQTwLHqXjyoeBiEGDfbcG"; // Your access token
         String tokenSecret = "C7ta5JzwYFktbMJEWiNzDV0NEucePKDyCRYjP9ZBtGxPi"; // Your access token secret
-        String nonce = randomNonce(); // A random string
-        String timestamp = String.valueOf(Instant.now().getEpochSecond()); // The current time in seconds since epoch
-        String signatureMethod = "HMAC-SHA1"; // The signature method
-        String version = "1.0"; // The OAuth version
-        String uri = "https://api.twitter.com/2/tweets";
+        String uri = "https://api.twitter.com/2/tweets"; // Endpoint
 
         JsonObject data = new JsonObject();
-        data.addProperty("text", "Arkadaşlar twitter apisini test edıyorum da kusura bakamyın :D");
+        data.addProperty("text", "Your tweet text");
 
-        String authorizationHeader = generateHeader(uri, consumerKey, consumerSecret, token, tokenSecret, nonce, signatureMethod, timestamp, version);
+        String authorizationHeader = generateHeader(uri, consumerKey, consumerSecret, token, tokenSecret);
 
         // Create an HttpRequest object with the POST method, the URL, the headers and the body
         HttpRequest request = HttpRequest.newBuilder()
@@ -56,7 +52,12 @@ public class Main {
         System.out.println(response.body());
     }
 
-    private static String generateHeader(String uri, String consumerKey, String consumerSecret, String token, String tokenSecret, String nonce, String signatureMethod, String timestamp, String version) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+    private static String generateHeader(String uri, String consumerKey, String consumerSecret, String token, String tokenSecret) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+        String nonce = randomNonce(); // A random string
+        String timestamp = String.valueOf(Instant.now().getEpochSecond()); // The current time in seconds since epoch
+        String signatureMethod = "HMAC-SHA1"; // The signature method
+        String version = "1.0"; // The OAuth version
+
         // Create the signature base string
         String signatureBaseString = "POST&" +
                 URLEncoder.encode(uri, "UTF-8") + "&" +
